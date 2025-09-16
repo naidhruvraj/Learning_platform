@@ -264,7 +264,7 @@ import { useRouter } from "next/navigation";
 const PostAssessment = () => {
   const { user } = useUser();
   const router = useRouter();
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]); // always array
   const [loading, setLoading] = useState(true);
   const [moduleId, setModuleId] = useState(null);
   const [moduleName, setModuleName] = useState(null);
@@ -285,19 +285,25 @@ const PostAssessment = () => {
       if (!moduleId || !user) return;
 
       try {
-        const response = await axios.post("http://localhost:8000/generate_assessment", {
-          student_email: user.primaryEmailAddress.emailAddress,
-          module_id: moduleId,
-        });
+        const response = await axios.post(
+          "http://localhost:8000/api/post_assessment",
+          {
+            student_email: user.primaryEmailAddress.emailAddress,
+            module_id: moduleId,
+          }
+        );
 
         console.log("API Response:", response.data);
-        if (response.data?.questions?.questions) {
-          setQuestions(response.data.questions.questions);
+
+        // Backend now returns: { questions: [...] }
+        if (Array.isArray(response.data?.questions)) {
+          setQuestions(response.data.questions);
         } else {
-          setQuestions([]);
+          setQuestions([]); // fallback
         }
       } catch (error) {
         console.error("Error fetching questions:", error);
+        setQuestions([]); // fallback
       } finally {
         setLoading(false);
       }
@@ -323,7 +329,9 @@ const PostAssessment = () => {
       const current = prev[index] || [];
       return {
         ...prev,
-        [index]: current.includes(option) ? current.filter((o) => o !== option) : [...current, option],
+        [index]: current.includes(option)
+          ? current.filter((o) => o !== option)
+          : [...current, option],
       };
     });
   };
@@ -363,7 +371,6 @@ const PostAssessment = () => {
         moduleName: moduleName,
         score,
       });
-
       router.push("/maintest/student");
     } catch (err) {
       console.error("Failed to save results", err);
@@ -375,6 +382,7 @@ const PostAssessment = () => {
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500 text-white">
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-white mb-6"></div>
         <p className="text-2xl font-semibold">Generating your personalized questions...</p>
+        <p className="text-lg mt-2">This may take about 2 minutes ⏳</p>
       </div>
     );
   }
