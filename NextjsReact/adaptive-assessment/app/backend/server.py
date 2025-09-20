@@ -270,41 +270,76 @@ preassessment_cache = {
     "ttl": 300  # Time-to-live in seconds (5 minutes)
 }
 
+# @app.get("/api/preassessment")
+# async def get_preassessment_questions():
+#     """
+#     Generates pre-assessment questions using Gemini and an in-memory cache.
+#     """
+#     current_time = time.time()
+    
+#     # Serve from cache if valid
+#     if preassessment_cache["data"] and (current_time - preassessment_cache["timestamp"] < preassessment_cache["ttl"]):
+#         print("Serving pre-assessment questions from cache.")
+#         return preassessment_cache["data"]
+
+#     prompt = """
+# Generate me 10 **unique** multiple-choice questions (MCQs) related to moderate-level mathematics and logical IQ. 
+# Each run should produce completely different questions with varied topics, structures, and numbers. 
+# Include a mix of patterns, logic, arithmetic puzzles, etc.
+
+# Strictly respond in this JSON format only:
+# [
+#   {
+#     "id": 1,
+#     "question": "Sample question?",
+#     "options": ["Option A", "Option B", "Option C", "Option D"],
+#     "answer": "Option A"
+#   }
+# ]
+# Only provide a valid JSON array. No explanations.
+# """
+#     try:
+#         response = model_pre.generate_content(prompt)
+#         output_text = response.candidates[0].content.parts[0].text.strip()
+#         questions_json = json.loads(output_text)
+
+#         preassessment_cache["data"] = {"questions": questions_json}
+#         preassessment_cache["timestamp"] = current_time
+
+#         return {"questions": questions_json}
+
+#     except Exception as e:
+#         print(f"Error generating pre-assessment questions: {e}")
+#         raise HTTPException(status_code=500, detail="Failed to generate pre-assessment questions.")
+
+# ** --- PRE-ASSESSMENT ENDPOINT --- **
 @app.get("/api/preassessment")
 async def get_preassessment_questions():
     """
-    Generates pre-assessment questions using Gemini and an in-memory cache.
+    Generates pre-assessment questions using Gemini with fresh output on every request.
     """
-    current_time = time.time()
-    
-    # Serve from cache if valid
-    if preassessment_cache["data"] and (current_time - preassessment_cache["timestamp"] < preassessment_cache["ttl"]):
-        print("Serving pre-assessment questions from cache.")
-        return preassessment_cache["data"]
-
     prompt = """
-Generate me 10 **unique** multiple-choice questions (MCQs) related to moderate-level mathematics and logical IQ. 
-Each run should produce completely different questions with varied topics, structures, and numbers. 
-Include a mix of patterns, logic, arithmetic puzzles, etc.
+Generate 10 unique multiple-choice questions (MCQs) for moderate-level mathematics and logical IQ.
+Each question must be different in topic, numbers, and structure.
+Include arithmetic puzzles, patterns, reasoning, and logic problems.
+Do NOT repeat questions from previous outputs.
+Return the output strictly as a JSON array like:
 
-Strictly respond in this JSON format only:
 [
   {
     "id": 1,
-    "question": "Sample question?",
+    "question": "Your first question here?",
     "options": ["Option A", "Option B", "Option C", "Option D"],
     "answer": "Option A"
   }
 ]
-Only provide a valid JSON array. No explanations.
+
+Do not include explanations or sample placeholder questions.
 """
     try:
         response = model_pre.generate_content(prompt)
         output_text = response.candidates[0].content.parts[0].text.strip()
         questions_json = json.loads(output_text)
-
-        preassessment_cache["data"] = {"questions": questions_json}
-        preassessment_cache["timestamp"] = current_time
 
         return {"questions": questions_json}
 

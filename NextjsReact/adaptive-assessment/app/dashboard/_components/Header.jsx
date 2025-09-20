@@ -10,65 +10,58 @@ function Header() {
   const pathname = usePathname();
   const { user } = useUser();
 
-  if (pathname.includes("/assessment")) {
-    return null; // Hide header during assessment
-  }
+  if (pathname.includes("/assessment")) return null;
 
   const role = user?.publicMetadata?.role;
 
-  return (
-    <div
-      className="relative flex items-center justify-between px-8 py-4 shadow-lg text-white"
-      style={{
-        backgroundImage: "url('https://picjumbo.com/wp-content/uploads/abstract-background-free-photo.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      {/* Dark overlay for better readability */}
-      <div className="absolute inset-0 bg-black/60"></div>
+  const navLinks = role === "teacher"
+    ? [
+        { href: "/dashboard/teacher", label: "Dashboard" },
+        { href: "/modules/teacher", label: "Manage Modules" },
+        { href: "/maintest/teacher", label: "Assessment Reports" },
+      ]
+    : [
+        { href: "/dashboard/student", label: "Dashboard" },
+        { href: "/modules/student", label: "Modules" },
+        { href: "/maintest/student", label: "Assessments" },
+      ];
 
-      {/* Logo (if needed) */}
+  return (
+    <div className="relative flex items-center justify-between px-8 py-4 shadow-md text-white"
+      style={{
+      background: "linear-gradient(to bottom, #a6c1ee 0%, #c1f0f6 100%)",
+    }}
+    >
+      {/* Logo + Title */}
       <div className="relative z-10 flex items-center gap-3">
-        {/* <Image src="/logo.svg" width={140} height={80} alt="Logo" /> */}
-        <h1 className="text-2xl font-bold tracking-wide">Learning Life</h1>
+        <Image src="/logo.png" alt="Ability Nest Logo" width={50} height={50} />
+        <h1 className="text-2xl font-bold tracking-wide text-white">Ability Nest</h1>
       </div>
 
       {/* Navigation Links */}
       <ul className="relative z-10 flex gap-8 text-lg">
-        <li className="relative group">
-          <Link href={role === "teacher" ? "/dashboard/teacher" : "/dashboard/student"}>
-            Dashboard
-          </Link>
-          <div className="absolute left-0 w-full h-1 bg-yellow-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-        </li>
-
-        {role === "teacher" ? (
-          <>
-            <li className="relative group">
-              <Link href="/modules/teacher">Manage Modules</Link>
-              <div className="absolute left-0 w-full h-1 bg-yellow-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-            </li>
-            <li className="relative group">
-              <Link href="/maintest/teacher">Assessment Reports</Link>
-              <div className="absolute left-0 w-full h-1 bg-yellow-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-            </li>
-          </>
-        ) : (
-          <>
-            <li className="relative group">
-              <Link href="/modules/student">Modules</Link>
-              <div className="absolute left-0 w-full h-1 bg-yellow-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-            </li>
-            <li className="relative group">
-              <Link href="/maintest/student">Assessments</Link>
-              <div className="absolute left-0 w-full h-1 bg-yellow-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-            </li>
-          </>
-        )}
+        {navLinks.map((link) => (
+          <li key={link.href} className="relative group">
+            <Link
+              href={link.href}
+              className={`transition-colors duration-300 ${
+              pathname === link.href
+                ? "text-purple-700 font-semibold" // highlighted page
+                : "text-gray-900 hover:text-purple-600" // normal page
+              }`}
+            >
+              {link.label}
+            </Link>
+            <div
+              className={`absolute left-0 w-full h-1 bg-white/70 transition-transform duration-300 ${
+                pathname === link.href ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+              }`}
+            ></div>
+          </li>
+        ))}
       </ul>
 
-      {/* User Profile & Logout Button */}
+      {/* User Profile & Logout */}
       <div className="relative z-10">
         <UserButton afterSignOutUrl="/dashboard" />
       </div>
@@ -77,3 +70,4 @@ function Header() {
 }
 
 export default Header;
+

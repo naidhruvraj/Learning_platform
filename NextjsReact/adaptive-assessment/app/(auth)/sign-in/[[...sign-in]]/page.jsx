@@ -4,14 +4,19 @@ import { motion } from "framer-motion";
 
 export default function LoginPage() {
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-gradient-to-br from-[#5899d2] to-[#A2C5E8] px-6">
+    <div className="flex h-screen w-full items-center justify-center bg-gradient-to-br from-[#5899d2] to-[#A2C5E8] px-6 relative overflow-hidden">
+      
+      {/* Decorative Background Shapes */}
+      <div className="absolute top-0 left-0 w-72 h-72 bg-yellow-300 rounded-full opacity-20 animate-pulse"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-400 rounded-full opacity-20 animate-pulse"></div>
+
       {/* Left Section - Motivational Quote */}
-      <div className="hidden md:flex flex-col w-1/2 text-left pr-10">
-        <h1 className="text-4xl font-extrabold text-[#F6E58D] leading-tight">
+      <div className="hidden md:flex flex-col w-1/2 text-left pr-10 z-10">
+        <h1 className="text-4xl font-extrabold text-[#F6E58D] leading-tight drop-shadow-lg">
           "Unlock Your Potential,  
           <br /> Learn, Grow & Shine!"
         </h1>
-        <p className="text-white text-lg mt-4">
+        <p className="text-white text-lg mt-4 drop-shadow-md">
           Every step you take today brings you closer to mastering new skills. 
           Stay curious, stay determined, and enjoy the journey! 🌟
         </p>
@@ -19,22 +24,30 @@ export default function LoginPage() {
 
       {/* Right Section - Animated Login Container */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="w-full max-w-md bg-[#8e62ec] rounded-3xl p-10 shadow-lg border border-gray-300 flex flex-col items-center"
+        initial={{ opacity: 0, scale: 0.9, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full max-w-md bg-white/20 backdrop-blur-lg rounded-3xl p-10 shadow-2xl border border-white/30 flex flex-col items-center z-20"
       >
-        <h2 className="text-3xl font-bold text-[#F6E58D] text-center mb-4">
+        <h2 className="text-3xl font-bold text-[#F6E58D] text-center mb-4 drop-shadow-md">
           Welcome Back!
         </h2>
-        <p className="text-white text-lg text-center mb-6">
+        <p className="text-white text-lg text-center mb-6 drop-shadow-sm">
           Sign in to continue your journey 🚀
         </p>
         <div className="w-full flex justify-center">
-          <SignIn />
+          <SignIn 
+            appearance={{
+              elements: {
+                card: "bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg",
+                formButtonPrimary: "bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl shadow-md hover:scale-105 transition-transform",
+                headerTitle: "text-2xl font-bold text-indigo-700",
+                formFieldInput: "border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:outline-none transition",
+              }
+            }}
+          />
         </div>
       </motion.div>
-      
     </div>
   );
 }
