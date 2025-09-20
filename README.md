@@ -1,7 +1,7 @@
 ************************HOW TO CLONE THE REPOSITORY************************
 
 step 1: cloning of the project
->> git clone https://github.com/naidhruvraj/Learning\_platform.git
+>> git clone https://github.com/naidhruvraj/Learning_platform.git
 (Note: make sure the destination folder path do not have space between their names)
 
 
