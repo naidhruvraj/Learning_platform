@@ -22,9 +22,7 @@ step 4: create .env inside the backend folder
 >> cd NextjsReact\\\\adaptive-assessment\\\\app\\\\backend
 >> New-Item -Name ".env" -ItemType "file"
 
-Add the following inside the file:
-MONGODB_URI=mongodb://localhost:27017/storage
-GOOGLE_API_KEY=AIzaSyDwHtsnne854zdFMWlzxLTZIYNxExPAEDc
+(Note: Add the API for Google Gemini and MongoDB inside the file)
 
 
 step 5: create virtual environment and install python dependencies
