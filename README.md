@@ -43,30 +43,46 @@ step 6: install .next modules
 
 We need to run both frontend server and backend server separately in two different terminals.
   1. Running the backend server:
+     
            * Open new terminal in vscode: ctrl+shift+`
+     
            * Change the current directory to 'NextjsReact' folder where '.env' is located:   eg: cd D:\...\...\NextjsReact
+     
            * Activate the virtual environment:   .venv\Scripts\activate
+     
            * Change the current directory to 'backend' folder where server.py is located:   eg: cd D:\...\...\app\backend
-           * Run the server:    uvicorn server:app --host 0.0.0.0 --port 8000 --reload
+     
+           * Run the server:    uvicorn server:app --host 0.0.0.0 --port 8000 --reload  
            
-  2. Running the frontend server:
+  3. Running the frontend server:
+     
            * Open new terminal in vscode: ctrl+shift+`
+     
            * Change the current directory to 'adaptive-assessment' folder:   eg: cd D:\...\...\adaptive-assessment
-           * Run the application: npm run dev
+      
+           * Run the application: npm run dev  
  
 In the application:
 
   Student account: 
+  
          just need to signup to land on the dashboard
      
   Teacher account:
+  
          **Only admins can create teacher account**
+         
               * Sign in to clerk dashboard from the admin account:  "https://dashboard.clerk.com/"
+              
               * Open the 'Learn&Grow' application --> Users --> Create user
+              
               * Create a teacher account by filling the username, mail_id and password
+              
               * Click on the user created --> metadata --> public --> edit
+              
               * Clear the current names and type:  
                     {
                       "role": "teacher"
                     }
+                    
               * Now sign into the application as a teacher rom the mail_id added
